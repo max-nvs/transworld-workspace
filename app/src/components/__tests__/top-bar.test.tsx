@@ -10,6 +10,6 @@ describe("TopBar", () => {
 
   it("renders logout button", () => {
     render(<TopBar userEmail="max@transworld.com" />);
-    expect(screen.getByRole("link", { name: /log out/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /log out/i })).toBeInTheDocument();
   });
 });

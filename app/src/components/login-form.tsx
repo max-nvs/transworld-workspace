@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logomark } from "@/components/logomark";
@@ -98,25 +98,47 @@ function ConfirmationView({
 }) {
   const [cooldown, setCooldown] = useState(0);
   const [isResending, setIsResending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   async function handleResend() {
     setIsResending(true);
+    setError(null);
     try {
-      await fetch("/auth/magic-link", {
+      const res = await fetch("/auth/magic-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to resend link");
+      }
+
       setCooldown(60);
-      const interval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setCooldown((prev) => {
           if (prev <= 1) {
-            clearInterval(interval);
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setIsResending(false);
     }
@@ -136,6 +158,9 @@ function ConfirmationView({
       </div>
       <div className="w-full rounded-2xl bg-card p-8 shadow-sm">
         <div className="flex flex-col gap-4">
+          {error && (
+            <p className="text-sm text-destructive">{error}</p>
+          )}
           <Button
             onClick={handleResend}
             disabled={cooldown > 0 || isResending}
