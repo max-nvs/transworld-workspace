@@ -52,7 +52,7 @@ export const TOOLS: Tool[] = [
     id: "commitment-tracker",
     name: "Commitment Tracker",
     description: "Track investment commitments",
-    href: "https://transworldct.netlify.app/",
+    href: "https://transworldct.netlify.app/auth/sso",
     icon: "check-circle",
     roles: ["admin", "finance", "sales", "md"],
   },
