@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Users,
   ClipboardList,
@@ -7,6 +10,9 @@ import {
   Landmark,
   Database,
   Lightbulb,
+  ShieldCheck,
+  ArrowRight,
+  Loader2,
 } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -18,30 +24,70 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   landmark: Landmark,
   database: Database,
   lightbulb: Lightbulb,
+  "shield-check": ShieldCheck,
 };
 
 interface ToolCardProps {
+  id: string;
   name: string;
   description: string;
   href: string;
   icon: string;
 }
 
-export function ToolCard({ name, description, href, icon }: ToolCardProps) {
+export function ToolCard({ id, name, description, href, icon }: ToolCardProps) {
   const Icon = ICON_MAP[icon] ?? Database;
+  const [loading, setLoading] = useState(false);
+
+  const isExternal = href !== "#" && href.startsWith("http");
+
+  async function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (!isExternal) return; // Let internal/placeholder links behave normally
+
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/sso/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tool_id: id }),
+      });
+
+      if (!res.ok) {
+        // Fallback: open the tool directly without SSO
+        window.open(href, "_blank", "noopener");
+        return;
+      }
+
+      const { redirect_url } = await res.json();
+      window.open(redirect_url, "_blank", "noopener");
+    } catch {
+      // Network error — fallback to direct link
+      window.open(href, "_blank", "noopener");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <a
       href={href}
-      className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:border-accent hover:shadow-[0_0_0_3px_rgba(201,166,77,0.1)]"
+      onClick={handleClick}
+      className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 transition-all hover:border-l-2 hover:border-l-[#C9A64D] hover:shadow-sm"
     >
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background">
-        <Icon className="h-5 w-5 text-foreground" />
+      <div className="flex items-center gap-4">
+        <Icon className="h-6 w-6 shrink-0 text-foreground" />
+        <div className="flex flex-col gap-0.5">
+          <h3 className="text-sm font-semibold text-foreground">{name}</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <h3 className="text-base font-semibold text-foreground">{name}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </div>
+      {loading ? (
+        <Loader2 className="h-4 w-4 shrink-0 animate-spin text-muted-foreground" />
+      ) : (
+        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+      )}
     </a>
   );
 }

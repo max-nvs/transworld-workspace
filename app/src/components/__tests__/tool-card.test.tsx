@@ -6,6 +6,7 @@ describe("ToolCard", () => {
   it("renders tool name and description", () => {
     render(
       <ToolCard
+        id="crm"
         name="Transworld CRM"
         description="Customer relationship management"
         href="https://crm.example.com"
@@ -21,6 +22,7 @@ describe("ToolCard", () => {
   it("renders as a link to the tool URL", () => {
     render(
       <ToolCard
+        id="crm"
         name="Transworld CRM"
         description="Customer relationship management"
         href="https://crm.example.com"
