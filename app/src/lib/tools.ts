@@ -60,7 +60,7 @@ export const TOOLS: Tool[] = [
     id: "treasury",
     name: "Transworld Treasury",
     description: "Treasury management and reporting",
-    href: "https://twfin.netlify.app/",
+    href: "https://twfin.netlify.app/auth/sso",
     icon: "landmark",
     roles: ["admin", "finance", "md"],
   },
