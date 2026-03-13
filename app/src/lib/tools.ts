@@ -44,7 +44,7 @@ export const TOOLS: Tool[] = [
     id: "verify-desk",
     name: "Verify Desk",
     description: "Document and identity verification",
-    href: "https://verifydesk.netlify.app/sign-in",
+    href: "https://verifydesk.netlify.app/auth/sso",
     icon: "shield-check",
     roles: ["admin", "operations", "sales", "md"],
   },
