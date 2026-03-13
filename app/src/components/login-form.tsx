@@ -3,13 +3,21 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Logomark } from "@/components/logomark";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Mail } from "lucide-react";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showContact, setShowContact] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,50 +49,81 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      <Logomark size={56} />
-      <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col gap-8">
+      {/* Header */}
+      <div className="flex flex-col gap-3">
         <h1 className="text-[30px] font-semibold leading-[1.27] text-foreground">
           Welcome back
         </h1>
         <p className="text-base text-muted-foreground">
-          Enter your email to receive a login link
+          Enter your email to receive a login link.
         </p>
       </div>
-      <div className="w-full rounded-2xl bg-card p-8 shadow-sm">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-text-label"
-            >
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your work email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="h-11 rounded-lg border-border px-3.5 text-base placeholder:text-text-placeholder focus-visible:ring-accent"
-            />
-          </div>
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="h-11 w-full rounded-lg bg-primary text-base font-semibold text-primary-foreground shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18)] hover:bg-primary-light"
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="email"
+            className="text-sm font-medium text-text-label"
           >
-            {isLoading ? "Sending..." : "Send magic link"}
-          </Button>
-        </form>
-      </div>
-      <p className="text-sm text-muted-foreground">
-        Need help? Contact your administrator
+            Email
+          </label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Enter your work email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="h-11 rounded-lg border-border bg-white px-3.5 text-base shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] placeholder:text-text-placeholder focus-visible:ring-accent"
+          />
+        </div>
+        {error && (
+          <p className="text-sm text-destructive">{error}</p>
+        )}
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="h-11 w-full rounded-lg bg-gradient-to-b from-[#C9A64D] to-[#B8954A] text-base font-semibold text-[#0B1D3A] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05),inset_0px_0px_0px_1px_rgba(201,166,77,0.3)] hover:from-[#B8954A] hover:to-[#A8853F]"
+        >
+          {isLoading ? "Sending..." : "Send magic link"}
+        </Button>
+      </form>
+
+      {/* Footer */}
+      <p className="text-center text-sm text-muted-foreground">
+        Need help?{" "}
+        <button
+          type="button"
+          onClick={() => setShowContact(true)}
+          className="font-medium text-primary underline hover:text-primary-light"
+        >
+          Contact your administrator
+        </button>
       </p>
+
+      <Dialog open={showContact} onOpenChange={setShowContact}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader className="items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
+              <Mail className="h-5 w-5 text-accent" />
+            </div>
+            <DialogTitle className="text-lg font-semibold text-foreground">
+              Contact your administrator
+            </DialogTitle>
+            <DialogDescription className="text-center text-sm text-muted-foreground">
+              For account access or login issues, reach out to the workspace
+              administrator.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-2 rounded-lg border border-border bg-background px-4 py-3 text-center">
+            <span className="text-sm font-medium text-primary">
+              max.ayobami@transworldltd.com.ng
+            </span>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -145,9 +184,9 @@ function ConfirmationView({
   }
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      <Logomark size={56} />
-      <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col gap-8">
+      {/* Header */}
+      <div className="flex flex-col gap-3">
         <h1 className="text-[30px] font-semibold leading-[1.27] text-foreground">
           Check your email
         </h1>
@@ -156,31 +195,34 @@ function ConfirmationView({
           <span className="font-semibold text-foreground">{email}</span>
         </p>
       </div>
-      <div className="w-full rounded-2xl bg-card p-8 shadow-sm">
-        <div className="flex flex-col gap-4">
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
-          <Button
-            onClick={handleResend}
-            disabled={cooldown > 0 || isResending}
-            variant="outline"
-            className="h-11 w-full rounded-lg border-border text-base font-semibold hover:border-accent"
-          >
-            {cooldown > 0
-              ? `Resend link (${cooldown}s)`
-              : isResending
-                ? "Sending..."
-                : "Resend link"}
-          </Button>
-        </div>
+
+      {/* Actions */}
+      <div className="flex flex-col gap-4">
+        {error && (
+          <p className="text-sm text-destructive">{error}</p>
+        )}
+        <Button
+          onClick={handleResend}
+          disabled={cooldown > 0 || isResending}
+          variant="outline"
+          className="h-11 w-full rounded-lg border-border text-base font-semibold hover:border-accent"
+        >
+          {cooldown > 0
+            ? `Resend link (${cooldown}s)`
+            : isResending
+              ? "Sending..."
+              : "Resend link"}
+        </Button>
       </div>
-      <button
-        onClick={onBack}
-        className="text-sm font-semibold text-primary hover:underline"
-      >
-        Back to login
-      </button>
+
+      <p className="text-center">
+        <button
+          onClick={onBack}
+          className="text-sm font-semibold text-primary hover:underline"
+        >
+          Back to login
+        </button>
+      </p>
     </div>
   );
 }

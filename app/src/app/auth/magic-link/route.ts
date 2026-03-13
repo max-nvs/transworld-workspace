@@ -12,6 +12,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // Dev preview mode — Supabase not configured
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || !supabaseUrl.startsWith("http")) {
+      return NextResponse.json({ success: true });
+    }
+
     const supabase = await createClient();
 
     const { error } = await supabase.auth.signInWithOtp({
