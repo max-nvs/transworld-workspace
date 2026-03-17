@@ -20,7 +20,7 @@ export const TOOLS: Tool[] = [
     id: "service-requests",
     name: "Service Requests",
     description: "Track and manage client service requests",
-    href: "#",
+    href: "https://transworld-service-tracker.vercel.app/auth/sso",
     icon: "clipboard-list",
     roles: ["admin", "operations", "sales", "md"],
   },
