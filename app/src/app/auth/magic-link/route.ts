@@ -12,6 +12,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // Only allow Transworld company emails
+    const allowedDomains = ["transworldltd.com.ng", "transworld.com.ng"];
+    const emailDomain = email.toLowerCase().split("@")[1];
+    if (!emailDomain || !allowedDomains.includes(emailDomain)) {
+      return NextResponse.json(
+        { error: "Only Transworld company emails are allowed." },
+        { status: 403 }
+      );
+    }
+
     // Dev preview mode — Supabase not configured
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     if (!supabaseUrl || !supabaseUrl.startsWith("http")) {
