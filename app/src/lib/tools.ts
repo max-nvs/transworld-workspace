@@ -12,7 +12,7 @@ export const TOOLS: Tool[] = [
     id: "crm",
     name: "Transworld CRM",
     description: "Customer relationship management",
-    href: "#",
+    href: "https://transworld-crm.up.railway.app/auth/sso",
     icon: "users",
     roles: ["admin", "sales", "bdrm", "md"],
   },
