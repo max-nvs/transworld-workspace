@@ -11,11 +11,12 @@ import {
   Database,
   Lightbulb,
   ShieldCheck,
+  Shield,
   ArrowRight,
   Loader2,
 } from "lucide-react";
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   users: Users,
   "clipboard-list": ClipboardList,
   activity: Activity,
@@ -25,6 +26,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   database: Database,
   lightbulb: Lightbulb,
   "shield-check": ShieldCheck,
+  shield: Shield,
 };
 
 interface ToolCardProps {
@@ -33,16 +35,22 @@ interface ToolCardProps {
   description: string;
   href: string;
   icon: string;
+  iconColor?: string;
 }
 
-export function ToolCard({ id, name, description, href, icon }: ToolCardProps) {
+export function ToolCard({ id, name, description, href, icon, iconColor }: ToolCardProps) {
   const Icon = ICON_MAP[icon] ?? Database;
   const [loading, setLoading] = useState(false);
 
-  const isExternal = href !== "#" && href.startsWith("http");
+  const isComingSoon = href === "#";
+  const isExternal = !isComingSoon && href.startsWith("http");
 
   async function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    if (!isExternal) return; // Let internal/placeholder links behave normally
+    if (isComingSoon) {
+      e.preventDefault();
+      return;
+    }
+    if (!isExternal) return;
 
     e.preventDefault();
     setLoading(true);
@@ -55,7 +63,6 @@ export function ToolCard({ id, name, description, href, icon }: ToolCardProps) {
       });
 
       if (!res.ok) {
-        // Fallback: open the tool directly without SSO
         window.open(href, "_blank", "noopener");
         return;
       }
@@ -63,11 +70,27 @@ export function ToolCard({ id, name, description, href, icon }: ToolCardProps) {
       const { redirect_url } = await res.json();
       window.open(redirect_url, "_blank", "noopener");
     } catch {
-      // Network error — fallback to direct link
       window.open(href, "_blank", "noopener");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (isComingSoon) {
+    return (
+      <div className="flex items-center justify-between rounded-xl border border-border bg-card p-5 opacity-50">
+        <div className="flex items-center gap-4">
+          <Icon className="h-6 w-6 shrink-0" style={{ color: iconColor }} />
+          <div className="flex flex-col gap-0.5">
+            <h3 className="text-sm font-semibold text-foreground">{name}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-1">{description}</p>
+          </div>
+        </div>
+        <span className="shrink-0 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+          Coming Soon
+        </span>
+      </div>
+    );
   }
 
   return (
@@ -77,10 +100,10 @@ export function ToolCard({ id, name, description, href, icon }: ToolCardProps) {
       className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 transition-all hover:border-l-2 hover:border-l-[#C9A64D] hover:shadow-sm"
     >
       <div className="flex items-center gap-4">
-        <Icon className="h-6 w-6 shrink-0 text-foreground" />
+        <Icon className="h-6 w-6 shrink-0" style={{ color: iconColor }} />
         <div className="flex flex-col gap-0.5">
           <h3 className="text-sm font-semibold text-foreground">{name}</h3>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-1">{description}</p>
         </div>
       </div>
       {loading ? (

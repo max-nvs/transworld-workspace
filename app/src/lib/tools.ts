@@ -4,6 +4,7 @@ export interface Tool {
   description: string;
   href: string;
   icon: string;
+  iconColor: string;
   roles: string[];
 }
 
@@ -14,6 +15,7 @@ export const TOOLS: Tool[] = [
     description: "Customer relationship management",
     href: "https://transworld-crm.up.railway.app/auth/sso",
     icon: "users",
+    iconColor: "#0B1D3A",
     roles: ["admin", "sales", "bdrm", "md"],
   },
   {
@@ -22,6 +24,7 @@ export const TOOLS: Tool[] = [
     description: "Track and manage client service requests",
     href: "https://transworld-service-tracker.vercel.app/auth/sso",
     icon: "clipboard-list",
+    iconColor: "#0B1D3A",
     roles: ["admin", "operations", "sales", "md"],
   },
   {
@@ -30,14 +33,16 @@ export const TOOLS: Tool[] = [
     description: "Regulatory compliance and reporting",
     href: "https://transworld-compliance.vercel.app/api/auth/sso",
     icon: "shield",
+    iconColor: "#0F7B6C",
     roles: ["admin", "compliance", "md"],
   },
-{
+  {
     id: "verify-desk",
     name: "Verify Desk",
     description: "Document and identity verification",
     href: "https://verifydesk.netlify.app/auth/sso",
     icon: "shield-check",
+    iconColor: "#0F7B6C",
     roles: ["admin", "operations", "sales", "md"],
   },
   {
@@ -46,6 +51,7 @@ export const TOOLS: Tool[] = [
     description: "Track investment commitments",
     href: "https://transworldct.netlify.app/auth/sso",
     icon: "check-circle",
+    iconColor: "#B8954A",
     roles: ["admin", "finance", "sales", "md"],
   },
   {
@@ -54,6 +60,7 @@ export const TOOLS: Tool[] = [
     description: "Treasury management and reporting",
     href: "https://twfin.netlify.app/auth/sso",
     icon: "landmark",
+    iconColor: "#B8954A",
     roles: ["admin", "finance", "md"],
   },
   {
@@ -62,6 +69,7 @@ export const TOOLS: Tool[] = [
     description: "Transworld Central Information System",
     href: "#",
     icon: "database",
+    iconColor: "#0B1D3A",
     roles: ["admin", "md"],
   },
   {
@@ -70,6 +78,7 @@ export const TOOLS: Tool[] = [
     description: "Research and market insights",
     href: "#",
     icon: "lightbulb",
+    iconColor: "#0B1D3A",
     roles: ["admin", "research", "md"],
   },
 ];
