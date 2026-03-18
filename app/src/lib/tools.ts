@@ -25,12 +25,12 @@ export const TOOLS: Tool[] = [
     roles: ["admin", "operations", "sales", "md"],
   },
   {
-    id: "pod3-ops",
-    name: "Pod 3 Ops Tracker",
-    description: "Operations tracking for Pod 3",
-    href: "#",
-    icon: "activity",
-    roles: ["admin", "operations", "md"],
+    id: "compliance",
+    name: "Compliance",
+    description: "Regulatory compliance and reporting",
+    href: "https://transworld-compliance.vercel.app/api/auth/sso",
+    icon: "shield",
+    roles: ["admin", "compliance", "md"],
   },
   {
     id: "cash-planning",
