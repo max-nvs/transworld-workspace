@@ -29,8 +29,8 @@ export const TOOLS: Tool[] = [
   },
   {
     id: "compliance",
-    name: "Compliance",
-    description: "Regulatory compliance and reporting",
+    name: "Daily Trade Reconciliation",
+    description: "Trade reconciliation and compliance reporting",
     href: "https://transworld-compliance.vercel.app/api/auth/sso",
     icon: "shield",
     iconColor: "#0F7B6C",
