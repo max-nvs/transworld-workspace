@@ -32,15 +32,7 @@ export const TOOLS: Tool[] = [
     icon: "shield",
     roles: ["admin", "compliance", "md"],
   },
-  {
-    id: "cash-planning",
-    name: "Cash Planning",
-    description: "Cash flow planning and forecasting",
-    href: "#",
-    icon: "banknote",
-    roles: ["admin", "finance", "md"],
-  },
-  {
+{
     id: "verify-desk",
     name: "Verify Desk",
     description: "Document and identity verification",
