@@ -33,32 +33,11 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // If there's an auth code in the URL, exchange it for a session here
-  // (don't redirect — that loses the PKCE code_verifier cookie)
-  const code = request.nextUrl.searchParams.get("code");
-  if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      // Strip the code param and redirect to dashboard
-      const url = request.nextUrl.clone();
-      url.searchParams.delete("code");
-      url.pathname = "/";
-      return NextResponse.redirect(url);
-    }
-    // Show the actual error on the login page for debugging
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.delete("code");
-    url.searchParams.set("error", "auth");
-    url.searchParams.set("detail", error.message || "unknown");
-    return NextResponse.redirect(url);
-  }
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect unauthenticated users to login (except login and auth pages)
+  // Redirect unauthenticated users to login (except login, auth, and SSO pages)
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&

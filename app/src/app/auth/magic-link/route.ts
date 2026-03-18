@@ -30,10 +30,16 @@ export async function POST(request: Request) {
 
     const supabase = await createClient();
 
+    // Use x-forwarded-host for production behind Netlify's load balancer
+    const forwardedHost = request.headers.get("x-forwarded-host");
+    const origin = forwardedHost
+      ? `https://${forwardedHost}`
+      : new URL(request.url).origin;
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${new URL(request.url).origin}/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback`,
       },
     });
 
