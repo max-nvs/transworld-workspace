@@ -45,7 +45,13 @@ export async function updateSession(request: NextRequest) {
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
-    console.error("Middleware code exchange error:", error.message);
+    // Show the actual error on the login page for debugging
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.delete("code");
+    url.searchParams.set("error", "auth");
+    url.searchParams.set("detail", error.message || "unknown");
+    return NextResponse.redirect(url);
   }
 
   const {
