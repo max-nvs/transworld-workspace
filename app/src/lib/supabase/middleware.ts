@@ -33,17 +33,24 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  // If there's an auth code in the URL, exchange it for a session here
+  // (don't redirect — that loses the PKCE code_verifier cookie)
+  const code = request.nextUrl.searchParams.get("code");
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      // Strip the code param and redirect to dashboard
+      const url = request.nextUrl.clone();
+      url.searchParams.delete("code");
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+    console.error("Middleware code exchange error:", error.message);
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  // If there's an auth code in the URL, redirect to the callback handler
-  const code = request.nextUrl.searchParams.get("code");
-  if (code && !request.nextUrl.pathname.startsWith("/auth/callback")) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/auth/callback";
-    return NextResponse.redirect(url);
-  }
 
   // Redirect unauthenticated users to login (except login and auth pages)
   if (
