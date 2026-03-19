@@ -64,6 +64,15 @@ export const TOOLS: Tool[] = [
     roles: ["admin", "finance", "md"],
   },
   {
+    id: "portal",
+    name: "Transworld Portal",
+    description: "Policies, procedures and workflow forms",
+    href: "https://transworld-portal.vercel.app/api/auth/sso",
+    icon: "book-open",
+    iconColor: "#0B1D3A",
+    roles: ["admin", "operations", "compliance", "finance", "sales", "md"],
+  },
+  {
     id: "tcis",
     name: "TCIS",
     description: "Transworld Central Information System",

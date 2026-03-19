@@ -3,7 +3,7 @@ import { TOOLS, getToolsForRole } from "../tools";
 
 describe("tools", () => {
   it("has 8 tools defined", () => {
-    expect(TOOLS).toHaveLength(8);
+    expect(TOOLS).toHaveLength(9);
   });
 
   it("every tool has required fields", () => {
@@ -20,7 +20,7 @@ describe("tools", () => {
 
   it("admin role can access all tools", () => {
     const adminTools = getToolsForRole("admin");
-    expect(adminTools).toHaveLength(8);
+    expect(adminTools).toHaveLength(9);
   });
 
   it("sales role sees CRM, Service Requests, and Commitment Tracker", () => {

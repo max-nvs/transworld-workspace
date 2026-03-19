@@ -12,6 +12,7 @@ import {
   Lightbulb,
   ShieldCheck,
   Shield,
+  BookOpen,
   ArrowRight,
   Loader2,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   lightbulb: Lightbulb,
   "shield-check": ShieldCheck,
   shield: Shield,
+  "book-open": BookOpen,
 };
 
 interface ToolCardProps {
