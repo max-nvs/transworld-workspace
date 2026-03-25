@@ -76,7 +76,7 @@ export const TOOLS: Tool[] = [
     id: "accounting",
     name: "Accounting",
     description: "General ledger, journals and financial reporting",
-    href: "https://transworld-accounting.vercel.app/auth/sso",
+    href: "https://transworld-accounting.vercel.app/api/auth/sso",
     icon: "calculator",
     iconColor: "#B8954A",
     roles: ["admin", "finance", "md"],
