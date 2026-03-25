@@ -73,6 +73,15 @@ export const TOOLS: Tool[] = [
     roles: ["admin", "operations", "compliance", "finance", "sales", "md"],
   },
   {
+    id: "accounting",
+    name: "Accounting",
+    description: "General ledger, journals and financial reporting",
+    href: "https://transworld-accounting.vercel.app/auth/sso",
+    icon: "calculator",
+    iconColor: "#B8954A",
+    roles: ["admin", "finance", "md"],
+  },
+  {
     id: "tcis",
     name: "TCIS",
     description: "Transworld Central Information System",
