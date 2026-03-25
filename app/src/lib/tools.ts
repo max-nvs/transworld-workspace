@@ -82,6 +82,15 @@ export const TOOLS: Tool[] = [
     roles: ["admin", "finance", "md"],
   },
   {
+    id: "cashflow",
+    name: "Cash Flow Planner",
+    description: "Cash flow planning, forecasting and approvals",
+    href: "https://transworld-cashflow.vercel.app/api/auth/sso",
+    icon: "banknote",
+    iconColor: "#B8954A",
+    roles: ["admin", "finance", "md"],
+  },
+  {
     id: "tcis",
     name: "TCIS",
     description: "Transworld Central Information System",
