@@ -32,6 +32,17 @@ export async function POST(request: Request) {
       );
     }
 
+    // Link-only tools are third-party products with their own login. They must
+    // never receive a workspace identity token — it would land in an external
+    // service's access logs for nothing. The card already skips this call; this
+    // is the check that actually holds, since anyone can POST here directly.
+    if (!tool.sso) {
+      return NextResponse.json(
+        { error: "Tool does not use workspace SSO" },
+        { status: 400 }
+      );
+    }
+
     // Get the authenticated user from Supabase session
     const supabase = await createClient();
     const {

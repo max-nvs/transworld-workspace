@@ -16,6 +16,17 @@ const VALID_PAYLOAD = {
 };
 
 describe("SSO", () => {
+  // Signing is symmetric: every tool holds the same secret, so a token minted
+  // for one tool verifies at every other tool unless the audience is checked.
+  // Tools bind on `aud`; this asserts the hub actually stamps it.
+  it("binds the token to the target tool via the audience claim", async () => {
+    const token = await issueToken(VALID_PAYLOAD);
+    const claims = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64url").toString()
+    );
+    expect(claims.aud).toBe(VALID_PAYLOAD.tool_id);
+  });
+
   it("issues a token that can be verified", async () => {
     const token = await issueToken(VALID_PAYLOAD);
     expect(token).toBeTruthy();

@@ -47,6 +47,7 @@ export function DashboardContent({ tools }: DashboardContentProps) {
             href={tool.href}
             icon={tool.icon}
             iconColor={tool.iconColor}
+            sso={tool.sso}
           />
         ))}
       </div>

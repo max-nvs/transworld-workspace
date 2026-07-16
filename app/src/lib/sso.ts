@@ -23,7 +23,13 @@ export interface SSOPayload {
 
 /**
  * Issue a short-lived SSO token for redirecting a user to an external tool.
- * The token is single-use — tools exchange it for user info via /api/sso/verify.
+ *
+ * The audience is the tool id. Signing is symmetric (HS256) with one secret
+ * shared by every tool, so without `aud` a token minted for one tool is a valid
+ * token at every other tool that trusts the same secret — a lower-trust tool
+ * could hand its token on to a higher-trust one. Tools must verify the audience
+ * is their own id. Existing verifiers that only check the issuer are unaffected
+ * by the extra claim.
  */
 export async function issueToken(payload: SSOPayload): Promise<string> {
   return new SignJWT({
@@ -36,6 +42,7 @@ export async function issueToken(payload: SSOPayload): Promise<string> {
     .setIssuedAt()
     .setExpirationTime(SSO_TOKEN_EXPIRY)
     .setIssuer("transworld-workspace")
+    .setAudience(payload.tool_id)
     .sign(getSecret());
 }
 

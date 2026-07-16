@@ -6,6 +6,8 @@ import {
   ClipboardList,
   Activity,
   Banknote,
+  Cake,
+  Calculator,
   CheckCircle,
   Landmark,
   Database,
@@ -13,15 +15,19 @@ import {
   ShieldCheck,
   Shield,
   BookOpen,
+  UserRoundCog,
   ArrowRight,
+  ExternalLink,
   Loader2,
 } from "lucide-react";
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
+export const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   users: Users,
   "clipboard-list": ClipboardList,
   activity: Activity,
   banknote: Banknote,
+  cake: Cake,
+  calculator: Calculator,
   "check-circle": CheckCircle,
   landmark: Landmark,
   database: Database,
@@ -29,6 +35,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   "shield-check": ShieldCheck,
   shield: Shield,
   "book-open": BookOpen,
+  "user-round-cog": UserRoundCog,
 };
 
 interface ToolCardProps {
@@ -38,9 +45,10 @@ interface ToolCardProps {
   href: string;
   icon: string;
   iconColor?: string;
+  sso: boolean;
 }
 
-export function ToolCard({ id, name, description, href, icon, iconColor }: ToolCardProps) {
+export function ToolCard({ id, name, description, href, icon, iconColor, sso }: ToolCardProps) {
   const Icon = ICON_MAP[icon] ?? Database;
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +60,9 @@ export function ToolCard({ id, name, description, href, icon, iconColor }: ToolC
       e.preventDefault();
       return;
     }
+    // Link-only tools have their own login. Let the browser follow the href
+    // so no workspace token is ever minted or put on a third-party URL.
+    if (!sso) return;
     if (!isExternal) return;
 
     e.preventDefault();
@@ -95,10 +106,18 @@ export function ToolCard({ id, name, description, href, icon, iconColor }: ToolC
     );
   }
 
+  // Design Council v4: link-only tiles get ExternalLink in the same slot, at the
+  // same size. Every tile already opens a new tab, so the glyph is not the
+  // signal that a separate login is coming — the description carries that. It
+  // is swapped so the card stops promising the forward navigation it isn't doing.
+  const Affordance = sso ? ArrowRight : ExternalLink;
+
   return (
     <a
       href={href}
       onClick={handleClick}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 transition-all hover:border-l-2 hover:border-l-[#C9A64D] hover:shadow-sm"
     >
       <div className="flex items-center gap-4">
@@ -111,7 +130,7 @@ export function ToolCard({ id, name, description, href, icon, iconColor }: ToolC
       {loading ? (
         <Loader2 className="h-4 w-4 shrink-0 animate-spin text-muted-foreground" />
       ) : (
-        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+        <Affordance className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
       )}
     </a>
   );
