@@ -16,6 +16,7 @@ import {
   Shield,
   BookOpen,
   UserRoundCog,
+  MessagesSquare,
   ArrowRight,
   ExternalLink,
   Loader2,
@@ -36,6 +37,7 @@ export const ICON_MAP: Record<string, React.ComponentType<{ className?: string; 
   shield: Shield,
   "book-open": BookOpen,
   "user-round-cog": UserRoundCog,
+  "messages-square": MessagesSquare,
 };
 
 interface ToolCardProps {

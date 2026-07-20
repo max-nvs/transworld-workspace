@@ -151,6 +151,29 @@ export const TOOLS: Tool[] = [
     sso: true,
   },
   {
+    // Self-hosted Chatwoot (client chat + call capture), not first-party code.
+    // Link-only for now: real SSO into Chatwoot CE would need either a
+    // super-admin platform token or a maintained fork, and it cannot carry
+    // client traffic until the host moves to Nigeria. See the Omnichannel repo,
+    // engineering-decisions/2026-07-20-workspace-sso-bridge.md. Staff use their
+    // own Chatwoot login until then, so no workspace token is issued.
+    id: "omnichannel",
+    name: "Transworld Omnichannel",
+    description: "Client chat & calls · separate login",
+    href: "https://chat.transworldltd.com.ng",
+    icon: "messages-square",
+    iconColor: "#0B1D3A",
+    roles: [
+      "admin",
+      "operations",
+      "compliance",
+      "sales",
+      "bdrm",
+      "md",
+    ],
+    sso: false,
+  },
+  {
     // Third-party product on trial with Transworld, not a Transworld system.
     // Staff sign in with their own Matamba credentials, so this tool never
     // receives a workspace token. The named trial group is Okezie, Dan and
